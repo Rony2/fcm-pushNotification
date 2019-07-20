@@ -26,7 +26,7 @@ function scheduleJobs() {
                 notification: {
                     title: 'Water Drink Reminder',
                     body: 'Time to get energise your body with a cup of water',
-                    clickaction: 'https://google.com'
+                    click_action: 'https://google.com'
                 }
             };
             var date = new Date();

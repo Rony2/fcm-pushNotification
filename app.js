@@ -43,7 +43,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-cron.schedule("*/1 * * * *", function () {
+cron.schedule("*/59 * * * *", function () {
   console.log('calling schedlue');
   scheduleJobs();
 });

@@ -3,6 +3,7 @@ var FCM = require('fcm-push');
 var serverKey = 'AAAAKPfNuyo:APA91bGy-Jh25WBq-neul4VPGItyJrHCkvhU_csrs7g57bT5QubgvSRHE-Plfcb5s4A-BZ2hU4UGQ7IUAX_toRWZUk-GEyRkhR-gUosDssIptPeNbS9M5Y7ut9e86uDFaKXH7LVrxMe8';
 var fcm = new FCM(serverKey);
 
+let dateIdMap = {};
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./config.json");
@@ -29,9 +30,17 @@ function scheduleJobs() {
                     click_action: 'https://spotify-coda.firebaseapp.com'
                 }
             };
-            var date = new Date();
-            date.setTime(new Date().getTime() + data.reminderTime * 60 * 60 * 1000);
-            console.log(date, new Date());
+            if (dateIdMap[doc.id]) {
+                var date = new Date(dateIdMap[doc.id]);
+                date.setTime(new Date(dateIdMap[doc.id]).getTime() + data.reminderTime * 60 * 60 * 1000);
+                dateIdMap[doc.id] = date.toUTCString();
+                console.log(date, new Date());
+            } else {
+                var date = new Date();
+                date.setTime(new Date().getTime() + data.reminderTime * 60 * 60 * 1000);
+                dateIdMap[doc.id] = date.toUTCString();
+                console.log(date, new Date());
+            }
             var j = schedule.scheduleJob(date, function () {
                 fcm.send(message, function (err, resp) {
                     if (err) {
@@ -43,6 +52,7 @@ function scheduleJobs() {
                 });
             })
         });
+        console.log(dateIdMap);
     })
 }
 

@@ -30,17 +30,9 @@ function scheduleJobs() {
                     click_action: 'https://spotify-coda.firebaseapp.com'
                 }
             };
-            if (dateIdMap[doc.id]) {
-                var date = new Date(dateIdMap[doc.id]);
-                date.setTime(new Date(dateIdMap[doc.id]).getTime() + data.reminderTime * 60 * 60 * 1000);
-                dateIdMap[doc.id] = date.toUTCString();
-                console.log(date, new Date());
-            } else {
-                var date = new Date();
-                date.setTime(new Date().getTime() + data.reminderTime * 60 * 60 * 1000);
-                dateIdMap[doc.id] = date.toUTCString();
-                console.log(date, new Date());
-            }
+            var date = new Date();
+            date.setTime(new Date().getTime() + data.reminderTime * 60 * 60 * 1000);
+            console.log(date, new Date());
             var j = schedule.scheduleJob(date, function () {
                 fcm.send(message, function (err, resp) {
                     if (err) {
